@@ -1,0 +1,28 @@
+# Python bytecode
+__pycache__/
+*.py[cod]
+
+# Direnv
+.direnv/             
+
+# Virtual environments
+.venv/
+venv/
+
+# Editor/OS-specific
+*.swp
+.DS_Store
+
+# Pytest and coverage
+.pytest_cache/
+.coverage
+
+# uv
+uv.lock
+
+# Misc
+*.log
+*.bak
+*.tmp
+.vscode/
+plans/

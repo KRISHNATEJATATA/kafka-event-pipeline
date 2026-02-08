@@ -1,0 +1,49 @@
+name: CI
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+env:
+  PYTHON_VERSION: "3.12"
+
+jobs:
+  lint-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: "pip"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          # Install from both requirements files if needed
+          pip install -r kafka-consumer/requirements.txt
+          pip install -r producer/requirements.txt
+          # Add ruff for linting (or add to requirements)
+          pip install ruff
+
+      - name: Lint with Ruff
+        run: |
+          # Adjust paths to your structure
+          ruff check kafka-consumer/ producer/ --output-format=github
+
+      # OPTIONAL: Add Docker build/test
+      - name: Install Docker Compose
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y docker-compose
+      - name: Build and Test Docker
+        run: |
+          docker-compose build
+          docker-compose up -d
+          # Run integration tests here, e.g., via pytest with testcontainers
+          docker-compose down

@@ -1,0 +1,57 @@
+# Pre-commit hooks for Event Processor
+# Install: pip install pre-commit && pre-commit install
+# Run manually: pre-commit run --all-files
+
+repos:
+  # Standard pre-commit hooks
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: trailing-whitespace
+        description: Remove trailing whitespace
+      - id: end-of-file-fixer
+        description: Ensure files end with newline
+      - id: check-yaml
+        description: Validate YAML syntax
+        args: ['--allow-multiple-documents']
+      - id: check-json
+        description: Validate JSON syntax
+      - id: check-toml
+        description: Validate TOML syntax
+      - id: check-merge-conflict
+        description: Check for merge conflict markers
+      - id: check-added-large-files
+        args: ['--maxkb=1000']
+        description: Prevent large files from being committed
+      - id: debug-statements
+        description: Check for debugger imports and breakpoints
+      - id: check-case-conflict
+        description: Check for files with names that would conflict on case-insensitive filesystems
+
+  # Ruff - Fast Python linter and formatter
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.1.14
+    hooks:
+      - id: ruff
+        name: ruff (lint)
+        args: [--fix, --exit-non-zero-on-fix]
+        types_or: [python, pyi]
+      - id: ruff-format
+        name: ruff (format)
+        types_or: [python, pyi]
+
+  # Security scanning
+  - repo: https://github.com/PyCQA/bandit
+    rev: 1.7.7
+    hooks:
+      - id: bandit
+        args: ['-r', 'kafka-consumer/', '-r', 'producer/']
+        additional_dependencies: ['bandit[toml]']
+        description: Security linter for Python
+
+  # Docker linting
+  - repo: https://github.com/hadolint/hadolint
+    rev: v2.12.0
+    hooks:
+      - id: hadolint-docker
+        description: Lint Dockerfiles for best practices

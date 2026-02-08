@@ -1,0 +1,9 @@
+kafka-python
+confluent-kafka
+prometheus_client
+requests
+pytest
+pytest-asyncio
+testcontainers[kafka]==3.7.1
+docker
+jsonschema

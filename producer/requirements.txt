@@ -1,0 +1,5 @@
+kafka-python
+jsonschema
+pyyaml
+requests
+python-dotenv
